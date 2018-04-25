@@ -5,7 +5,8 @@
 #include <time.h>
 
 struct stat stat1, stat2;
-struct tm *time1, *time2;
+struct tm time1, time2;
+struct tm *temp;
 
 void filestat1(void);
 void filestat2(void);
@@ -33,8 +34,8 @@ int main(void)
 void filestat1(void)
 {
    stat("text1", &stat1);//text1 size,blocks 크기 저장
-   printf("text1 size: %d\n", (int)stat1.st_size);
-   printf("text1 blocks : %d\n", (int)stat1.st_blocks);
+   //printf("text1 size: %d\n", (int)stat1.st_size);
+   //printf("text1 blocks : %d\n", (int)stat1.st_blocks);
    return;
 }
 
@@ -42,34 +43,34 @@ void filestat1(void)
 void filestat2(void)
 {
    stat("text2", &stat2);// text1 size,blocks 크기 저장
-   printf("text2 size: %d\n", (int)stat2.st_size);
-   printf("text2 blocks : %d\n", (int)stat2.st_blocks);
+   //printf("text2 size: %d\n", (int)stat2.st_size);
+   //printf("text2 blocks : %d\n", (int)stat2.st_blocks);
    return;
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
 void filetime1(void)
 {
-   stat("text1", &stat1);
-   time1 = localtime(&stat1.st_mtime);//시간정보가져오기
-   printf("Time information of text1\n");
-   printf("month : %d\n", time1->tm_mon+1);
-   printf("date : %d\n", time1->tm_mday);
-   printf("hour : %d\n", time1->tm_hour);
-   printf("min : %d\n", time1->tm_min);
+   temp = localtime(&stat1.st_mtime);//시간정보가져오기
+   time1 = *temp;
+   //printf("Time information of text1\n");
+   //printf("month : %d\n", time1.tm_mon+1);
+   //printf("date : %d\n", time1.tm_mday);
+   //printf("hour : %d\n", time1.tm_hour);
+   //printf("min : %d\n", time1.tm_min);
    return;
 }
 
 //파일 2의 시간 정보를 가져오는 함수 작성
 void filetime2(void)
 {
-   stat("text2", &stat2);
-   time2 = localtime(&stat2.st_mtime);//시간정보가져오기
-   printf("Time information of text2\n");
-   printf("month : %d\n", time2->tm_mon + 1);
-   printf("date : %d\n", time2->tm_mday);
-   printf("hour : %d\n", time2->tm_hour);
-   printf("min : %d\n", time2->tm_min);
+   temp = localtime(&stat2.st_mtime);//시간정보가져오기
+   time2 = *temp;
+   //printf("Time information of text2\n");
+   //printf("month : %d\n", time2.tm_mon + 1);
+   //printf("date : %d\n", time2.tm_mday);
+   //printf("hour : %d\n", time2.tm_hour);
+   //printf("min : %d\n", time2.tm_min);
    return;
 }
 
@@ -79,13 +80,13 @@ void sizecmp(void)
    printf("size compare\n");
 
    if((int)stat1.st_size > (int)stat2.st_size)
-   printf("text1 is bigger\n");
+   printf("text1 is bigger\n\n");
          else{
         if((int)stat1.st_size == (int)stat2.st_size)
-{
-                 printf("The two file sizes are the same\n");
-}
-   printf("text2 is bigger\n");
+	{
+                 printf("The two file sizes are the same\n\n");
+	}
+   	printf("text2 is bigger\n\n");
 
         }
 
@@ -98,34 +99,30 @@ void blockcmp(void)
    printf("block compare\n");
 
    if((int)stat1.st_blocks > (int)stat2.st_blocks)
-        printf("text1 is bigger\n");
-        else{
-
-           if((int)stat1.st_blocks == (int)stat2.st_blocks)
-                { printf("The two file block sizes are the same\n");
-        }
-        printf("text2 is bigger\n");
-        }
+        printf("text1 is bigger\n\n");
+        else if((int)stat1.st_blocks == (int)stat2.st_blocks)
+		printf("The two file block sizes are the same\n\n");
+	else
+		printf("text2 is bigger\n\n");
 
         return;
 }
-
 
 //두 개의 파일 수정 날짜를 비교하는 함수 작성
 void datecmp(void)
 {
 	printf("Date Compare\n");
 
-	if(time1->tm_mon == time2->tm_mon){
-		if(time1->tm_mday > time2->tm_mday){
-			printf("Text1 is latest\n");
-		}else if(time2->tm_mday > time1->tm_mday) printf("Text2 is latest\n");
-			else printf("Text1 & Text2 same date.\n");
+	if(time1.tm_mon == time2.tm_mon){
+		if(time1.tm_mday > time2.tm_mday){
+			printf("Text1 is latest\n\n");
+		}else if(time2.tm_mday > time1.tm_mday) printf("Text2 is latest\n\n");
+			else printf("Text1 & Text2 same date.\n\n");
 	}
-	else if(time1->tm_mon > time2->tm_mon){
-		printf("Text 1 is lastest\n");
-		}else if(time2->tm_mon > time1->tm_mon) printf("Text2 is lastest\n");
-			else printf("Text1 & Text2 same date.\n");
+	else if(time1.tm_mon > time2.tm_mon){
+		printf("Text 1 is lastest\n\n");
+		}else if(time2.tm_mon > time1.tm_mon) printf("Text2 is lastest\n\n");
+			else printf("Text1 & Text2 same date.\n\n");
 }
 
 //두 개의 파일 수정 시간을 비교하는 함수 작성
@@ -133,14 +130,17 @@ void timecmp(void)
 {
 	printf("time Compare\n");
 
-	if(time1->tm_hour == time2->tm_hour){
-		if(time1->tm_min > time2->tm_min){
-			printf("Text1 is latest\n");
-		}else if(time2->tm_min > time1->tm_min) printf("Text2 is latest\n");
-		else printf("Text1 & Text2 same time.\n");
+	if(time1.tm_hour == time2.tm_hour){
+		if(time1.tm_min > time2.tm_min){
+			printf("Text1 is latest\n\n");
+		}else if(time2.tm_min > time1.tm_min) printf("Text2 is latest\n\n");
+		else printf("Text1 & Text2 same time.\n\n");
 	}
-	else if(time1->tm_hour > time2->tm_hour){
-		printf("Text 1 is lastest\n");
-	}else if(time2->tm_hour > time1->tm_hour) printf("Text2 is lastest\n");
-		else printf("Text1 & Text2 same time. \n");
+	else if(time1.tm_hour > time2.tm_hour){
+		printf("Text 1 is lastest\n\n");
+	}else if(time2.tm_hour > time1.tm_hour) printf("Text2 is lastest\n\n");
+		else printf("Text1 & Text2 same time. \n\n");
 }
+
+
+
