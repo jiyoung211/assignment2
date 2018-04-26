@@ -99,13 +99,10 @@ void blockcmp(void)
 
    if((int)stat1.st_blocks > (int)stat2.st_blocks)
         printf("text1 is bigger\n");
-        else{
-
-           if((int)stat1.st_blocks == (int)stat2.st_blocks)
-                { printf("The two file block sizes are the same\n");
-        }
-        printf("text2 is bigger\n");
-        }
+        else if((int)stat1.st_blocks == (int)stat2.st_blocks)
+                 printf("The two file block sizes are the same\n");
+		 else 
+			printf("text2 is bigger\n");
 
         return;
 }
